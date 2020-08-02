@@ -1,0 +1,59 @@
+{% extends 'base_view.html' %}
+
+{% block title %}
+    <title>Task Tracker Selected Task Board Page</title>
+{% endblock %}
+
+{% block page_header %}
+    <div class="col-6 d-flex justify-content-start">
+        <span class="header-label">
+            <span>Invite Board Member</span>
+        </span>
+    </div>
+    <div class="col-6 d-flex justify-content-end">
+        <span class="board-counter">
+            <span>
+                <!-- <a href="/{{task_board_id}}/add-task-board-member" class="btn btn-sm btn-success">Add Member</a> -->
+            </span>
+        </span>
+        <span class="board-counter">
+            <span>
+                <!-- <a href="/{{task_board_id}}/add-task-to-task-board" class="btn btn-sm btn-success">Add Task</a> -->
+            </span>
+        </span>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form class="col-md-6 offset-md-3 mt-3" action="/{{selected_task_board_id}}/add-task-board-member" method="post">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                <h3 class="h3 d-flex justify-content-center">Invite Member to Task Board</h3>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <input type="hidden" name="selected_task_board_id" id="selected_task_board_id">
+                    <label for="member_id">Select Member</label>
+                    <select class="form-control" id="member_id" name="member_id">
+                        <option value="">Select Member</option>
+                        {% for user in prospective_member_list %}
+                            <option value="{{ user.key.id() }}">{{ user.othernames}} {{ user.lastname }} ({{ user.email }})</option>
+                        {% endfor %}
+                    </select>
+                    {% if has_error %}
+                        {% if not selected_member_id %}
+                            <small class="form-text text-danger">Board member MUST be selected</small>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 offset-md-3 mt-3">
+                    <input type="submit" class="btn btn-block btn-outline-success" name="button" value="Add Member">
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

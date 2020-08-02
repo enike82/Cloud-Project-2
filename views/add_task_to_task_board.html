@@ -1,0 +1,68 @@
+{% extends 'base_view.html' %}
+
+{% block title %}
+    <title>Task Tracker Selected Task Board Page</title>
+{% endblock %}
+
+{% block page_header %}
+    <div class="col-6 d-flex justify-content-start">
+        <span class="header-label">
+            <span>Create New Task</span>
+        </span>
+    </div>
+    <div class="col-6 d-flex justify-content-end">
+        <span class="board-counter">
+            <span>
+                <!-- <a href="/{{task_board_id}}/add-task-board-member" class="btn btn-sm btn-success">Add Member</a> -->
+            </span>
+        </span>
+        <span class="board-counter">
+            <span>
+                <!-- <a href="/{{task_board_id}}/add-task-to-task-board" class="btn btn-sm btn-success">Add Task</a> -->
+            </span>
+        </span>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form class="col-md-6 offset-md-3 mt-3" action="/{{selected_task_board_id}}/add-task-to-task-board" method="post">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                <h3 class="h3 d-flex justify-content-center">Create New Task</h3>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <input type="hidden" name="selected_task_board_id" id="selected_task_board_id">
+                    <label for="task_name">Task Title</label>
+                    <input type="text" class="form-control" value="{{task_name}}" id="task_name" name="task_name" placeholder="Enter task title">
+                    {% if has_error %}
+                        {% if msg %}
+                            <small class="form-text text-danger">{{ msg }}</small>
+                        {% elif not task_name %}
+                            <small class="form-text text-danger">Task name is required</small>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <input type="hidden" name="selected_task_board_id" id="selected_task_board_id">
+                    <label for="due_date">Due Date</label>
+                    <input type="date" class="form-control" value="{{due_date}}" id="due_date" name="due_date">
+                    {% if has_error %}
+                        {% if not due_date %}
+                            <small class="form-text text-danger">Due date is required</small>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 offset-md-3 mt-3">
+                    <input type="submit" class="btn btn-block btn-outline-success" name="button" value="Add Task">
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

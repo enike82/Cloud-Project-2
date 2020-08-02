@@ -1,0 +1,57 @@
+{% extends 'base_view.html' %}
+
+{% block title %}
+    <title>Task Tracker Account Update Page</title>
+{% endblock %}
+
+{% block page_header %}
+<div class="col-6 d-flex justify-content-start">
+    <span class="header-label">
+        <span>User Details</span>
+    </span>
+</div>
+<div class="col-6 d-flex justify-content-end">
+    <span class="board-counter">
+
+    </span>
+</div>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form class="col-md-6 offset-md-3" action="/update-account" method="post">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                   <h3 class="h3 d-flex justify-content-center">Update Account Information</h3>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="lastname">Lastname</label>
+                    <input type="text" class="form-control" value="{{ lastname }}"  id="lastname" name="lastname">
+                    {% if has_error %}
+                        {% if not lastname %}
+                            <small class="form-text text-danger">Lastname is required</small>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="othernames">Othername(s)</label>
+                    <input type="text" class="form-control" value="{{ othernames }}" id="othernames" name="othernames">
+                    {% if has_error %}
+                        {% if not othernames %}
+                            <small class="form-text text-danger">Othername(s) is required</small>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 offset-md-3 mt-3">
+                    <input type="submit" class="btn btn-block btn-outline-success" name="button" value="Update Account">
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

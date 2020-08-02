@@ -1,0 +1,83 @@
+{% extends 'base_view.html' %}
+
+{% block title %}
+    <title>Task Tracker Home Page</title>
+{% endblock %}
+
+{% block page_header %}
+<div class="container board-listing-header">
+    <div class="row">
+        <div class="col-6 d-flex justify-content-start">
+            <span class="header-label">
+                <span>Task Boards</span>
+            </span>
+            <span class="board-counter">
+                <span>
+                    <div class="counter">
+                        {{ task_board_length }}
+                    </div>
+                </span>
+            </span>
+        </div>
+        <div class="col-6 d-flex justify-content-end">
+            <span class="board-counter">
+                <span>
+                    <a href="/create-task-board" class="btn btn-sm btn-success">New Task Board</a>
+                </span>
+            </span>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-10 offset-md-1 mt-5">
+        {% if msg %}
+            <div class="alert alert-info d-flex justify-content-center" role="alert">
+                {{msg}}
+            </div>
+        {% endif %}
+        <div class="row">
+            {% if task_board_length <= 0%}
+                <h3 class="h3 mt-5 pt-5 text-muted" style="width: 100%; text-align: center;">No Task Board Found</h3>
+            {% else %}
+                {% for task_board in task_boards %}
+                    <div class="col-md-6 mb-5">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <span>
+                                    <a href="/{{task_board.key.id()}}" class="text-truncate" style="text-transform: capitalize;">{{task_board.name}}</a>
+                                    {% if has_error %}
+                                        {% if id == task_board.key.id()|string %}
+                                            <span class="badge badge-success badge-pill ml-3">New</span>
+                                        {% endif %}
+                                    {% endif %}
+                                </span>
+                                <span>
+                                    <a href="/{{task_board.key.id()}}/edit-task-board" title="Edit Task Board">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </a>
+                                    {% if task_board.board_members|length == 1 and task_board.board_tasks|length < 1 %}
+                                        <a class="text-danger" href="/{{task_board.key.id()}}/delete-task-board" title="Delete Task Board">
+                                            <!-- <i class="fas fa-times text-danger ml-2"></i> -->X
+                                        </a>
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <ul class="card-label-list">
+                                    <li class="label-item">
+                                        <a href="#" class="text-dark"><i class="fas fa-users"></i>&nbsp;&nbsp;Members &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-muted">{{task_board.board_members|length}}</span></a>
+                                    </li>
+                                    <li class="label-item">
+                                        <a href="#" class="text-dark"><i class="fas fa-tasks"></i>&nbsp;&nbsp;Tasks &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-muted">{{task_board.board_tasks|length}}</span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

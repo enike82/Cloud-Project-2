@@ -1,0 +1,109 @@
+{% extends 'base_view.html' %}
+
+{% block title %}
+    <title>Task Tracker Selected Task Board Page</title>
+{% endblock %}
+
+{% block page_header %}
+    <div class="col-6 d-flex justify-content-start">
+        <span class="header-label">
+            <span>{{ task_board.name }}</span>
+        </span>
+    </div>
+    <div class="col-6 d-flex justify-content-end">
+        <span class="board-counter">
+            <span>
+                {%if user.user_id()|string == task_board.created_by%}
+                    <a href="/{{task_board_id}}/add-task-board-member" class="btn btn-sm btn-success">Add Member</a>
+                {%endif%}
+            </span>
+        </span>
+        <span class="board-counter">
+            <span>
+                <a href="/{{task_board_id}}/add-task-to-task-board" class="btn btn-sm btn-success">Add Task</a>
+            </span>
+        </span>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-10 mt-1">
+        <h6 class="h6 pt-2">Tasks</h6>
+        {% if task_board.board_tasks|length <= 0 %}
+            <div class="empty-list-board">
+                <span>Task list is empty</span>
+            </div>
+        {% else %}
+            <input type="hidden" value="{{task_board_id}}" name="task_board_id" id="task_board_id">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col" style="width:5%;">#</th>
+                    <th scope="col" style="width:5% !important;">Status</th>
+                    <th scope="col" style="width:35%;">Title</th>
+                    <th scope="col" style="width:15%;">Due Date</th>
+                    <th scope="col" style="width:25%;">Assigned</th>
+                    <th scope="col" style="width:15%;"></th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for task in task_board.board_tasks %}
+                            <tr>
+                                <th class="{% if task.marked_as_unassigned %}text-danger{% endif %}" scope="row" style="width:5%;">{{loop.index}}</th>
+                                <td style="width:5%;"><input type="checkbox" data-task-index="{{loop.index-1}}" class="checkbox" {% if task.completed %}checked{% endif %}/></td>
+                                <td class="{% if task.marked_as_unassigned %}text-danger{% endif %}">
+                                    {{task.title}}
+                                    {%  if task.completed %}
+                                    <br/>
+                                    <small>
+                                        <span class="text-success" style="font-weight: 900;">
+                                            {{task.completed_on.strftime('%d-%m-%Y')}}
+                                        </span>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{dateTimeConvert(task.completed_on).strftime("%H:%M")}}
+                                    </small>
+                                    {% endif %}
+                                </td>
+                                <td class="{% if task.marked_as_unassigned %}text-danger{% endif %}">{{task.due_date}}</td>
+                                <td class="d-flex justify-content-between align-items-center">
+                                    <select class="form-control assign_task_updated" data-task-index="{{loop.index-1}}" id="member_id" name="member_id" style="background: transparent; border: none; outline: none;">
+                                        <option value="" {% if not task.is_assigned %} selected {% endif %}>Not Assigned</option>
+                                        {% for user in board_members %}
+                                            <option
+                                                value="{{ user.key.id() }}"
+                                                {% if task.is_assigned and task.assigned_to == user.key.id()|string %} selected {% endif %}
+                                            >{{ user.othernames}} {{ user.lastname }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                    <a href="/{{task_board_id}}/tasks/{{loop.index-1}}/edit-task" class="btn btn-sm btn-info mr-2">Edit</a>
+                                    <a href="/{{task_board_id}}/tasks/{{loop.index-1}}/delete-task" class="btn btn-sm btn-danger">Del</a>
+                                </td>
+                            </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+    <div class="col-md-2 mt-1">
+        <h6 class="h6 pt-2">Members</h6>
+        <ul class="list-group">
+            {% for board_member in board_members %}
+                <li class="list-group-item d-flex justify-content-between align-items-center" style="font-size: 11px;">
+                    <span title="{{board_member.othernames}} {{board_member.lastname}}" class="text-truncate">{{ board_member.othernames}} {{ board_member.lastname }}</span>
+                    {% if task_board.created_by == board_member.key.id()|string %}
+                    <a href="#" class="badge badge-success badge-pill"><strong style="font-weight: 900; font-size: 140%;" >C</strong></a>
+                    {% elif user.user_id()|string == task_board.created_by and not(task_board.created_by == board_member.key.id()|string) %}
+                        <a href="/{{task_board_id}}/members/{{board_member.key.id()}}/delete-member" class="badge badge-danger badge-pill"><i class="fas fa-times"></i></a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div style="position: fixed; bottom: 0; width: 100%; height: 50px; display: flex; flex-direction: row; align-items: center; justify-content: center;">
+        <div class="mr-3 ml-3"><strong>Active Task:</strong> {{active_task}}</div>
+        <div class="mr-3 ml-3"><strong>Completed Task:</strong> {{completed_task}}</div>
+        <div class="mr-3 ml-3"><strong>Total Task:</strong> {{total_task}}</div>
+        <div class="mr-3 ml-3"><strong>Task Completed Today:</strong> {{task_completed_today}}</div>
+    </div>
+{% endblock %}

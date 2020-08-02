@@ -1,0 +1,148 @@
+
+
+* {
+    box-sizing: border-box !important;
+}
+
+html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+
+    overflow-x: hidden !important;
+    background: #eff9ef;
+
+    font-family: 'Roboto', sans-serif;
+}
+
+header {
+    height: 90px;
+    background: #fff;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.navbar-area {
+    height: 40px;
+    background-color: #256188;
+}
+
+.app-brand, .accounts {
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.accounts {
+    justify-content: flex-end;
+}
+
+.app-brand {
+    justify-content: flex-start;
+}
+
+.nav-links {
+    color: #ffffff;
+    font-size: 12px;
+}
+
+.nav-links:hover {
+    color: rgb(255, 70, 3);
+    text-decoration: none;
+}
+
+.app-logo {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
+.app-logo span {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: rgb(255, 70, 3) !important;
+
+    font-size: 20px;
+}
+
+.app-name {
+    font-family: 'Slabo 27px', serif;
+    font-size: 25px;
+    font-weight: 900;
+}
+
+.board-listing-header {
+    height: 50px;
+}
+
+.header-label, .board-counter {
+    display: inline-block;
+    height: 50px;
+}
+
+.header-label span, .board-counter span {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-label {
+    border-bottom: 3px solid rgb(255, 70, 3);
+    padding: 0 20px;
+    font-size: 25px;
+}
+
+.board-counter {
+    padding: 0 10px;
+    color: #aaa;
+}
+
+.counter {
+    height: 25px;
+    border-left: 1px solid #aaa;
+    padding: 0 0 10px 10px;
+    margin: 0;
+}
+
+.card-label-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.label-item a:hover {
+    text-decoration: none;
+}
+
+.empty-list-board {
+    width: 100%;
+    height: 200px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+td {
+    min-width: 150px !important;
+}

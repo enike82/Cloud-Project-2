@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Roboto|Slabo+27px&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/static/css/style.css">
+        {% block title %} {% endblock %}
+    </head>
+    <body>
+        <header class="container-fluid">
+            <div class="row">
+                <div class="container-fluid navbar-area">
+                    <div class="row">
+                        <div class="col-6 app-brand">
+                            <a href="#" class="nav-links">
+                                <span class="app-logo">
+                                    <span><i class="fas fa-tenge"></i></span>
+                                </span>
+                            </a>
+                            <a href="/" class="nav-links">
+                                <span class="app-name">TaskTracker</span>
+                            </a>
+                        </div>
+                        <div class="col-6 accounts">
+                            {% if user and (not should_update_account) %}
+                                <a href="#" class="nav-links mr-3">
+                                    <span class="logo" style="text-transform: uppercase;">{{ user_fullname }}</span>
+                                </a>
+
+                                <a href="{{ url }}" class="nav-links">
+                                    <span class="logo" style="text-transform: uppercase;">LOGOUT</span>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="container board-listing-header">
+                    <div class="row">
+                        {% block page_header%} {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="container-fluid">
+            <div class="row">
+                {% block content %} {% endblock %}
+            </div>
+        </main>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/211480a66b.js" crossorigin="anonymous"></script>
+        <script>
+            $(document).ready(()=>{
+                $(".assign_task_updated").on("change", (e) => {
+                    const data = {};
+
+                    data.task_board_id = $("#task_board_id").val();
+                    data.task_index = parseInt(e.target.getAttribute("data-task-index"), 10);
+                    data.assigned_to = e.target.value;
+                    data.post_action = "assign-task-to-member";
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/post-api-services',
+                        contentType: 'application/json',
+                        data: data,
+                        dataType: 'json',
+                        success: function(data){
+                            if (data.code === 400) {
+                                location.replace(data.url);
+                            } else {
+                                location.reload();
+                            }
+                        },
+                        error: function(data, textStatus, errorThrown) {
+                            console.log(data);
+                        }
+                    });
+                });
+
+                $(".checkbox").on("click", (e) => {
+                    const data = {};
+
+                    data.task_board_id = $("#task_board_id").val();
+                    data.task_index = parseInt(e.target.getAttribute("data-task-index"), 10);
+                    data.completed = e.target.checked;
+                    data.post_action = "update-checked-task-status";
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/post-api-services',
+                        contentType: 'application/json',
+                        data: data,
+                        dataType: 'json',
+                        success: function(data){
+                            if (data.code === 400) {
+                                location.replace(data.url);
+                            } else {
+                                location.reload();
+                            }
+                        },
+                        error: function(data, textStatus, errorThrown) {
+                            console.log(data);
+                        }
+                    });
+                });
+            })
+        </script>
+    </body>
+</html>
